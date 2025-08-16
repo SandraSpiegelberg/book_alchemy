@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Book Alchemy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+    .top_options {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .add_options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+    .add_buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .add_options p {
+      margin: 0;
+    }
+    .flashes .success {
+      color: green;
+      font-weight: bold;
+    }
+    .search_message h4{
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+  </head>
+  <body>
+    <h1 style="text-align:center;">Book Alchemy</h1>
+    <div class="top_options">
+      <div class="sorting_options">
+        <h4>Sorted by: </h4>
+        <form action="/sorted" method="POST">
+          <button type="submit" name="sort_by" value="author">Author</button>
+          <button type="submit" name="sort_by" value="title">Book Title</button>
+        </form>
+      </div>
+      <div class="add_options">
+        <h4>Add new: </h4>
+        <div class="add_buttons">
+          <form action="/add_author" method="GET">
+            <button>Author</button>
+          </form>
+          <form action="/add_book" method="GET">
+            <button>Book</button>
+          </form>
+        </div>
+        <p>Please add the author first and than the corresponding book.</p>
+      </div>
+      <div class="search_option">
+        <form action="/search" method="POST">
+          <input type="text" id="search_words" name="search" placeholder="Enter a word or phrase to search in the titles.">
+          <button type="submit" >Search</button>
+        </form>
+
+      </div>
+    <div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class="flashes">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+    </div>
+    </div>
+    {% if not books %}
+    <div class="search_message">
+    <h4>There are no books in the library or no books that match the search criteria.</h4>
+    </div>
+    {% else %}
+    {% for book in books %}
+    <div> 
+      <h3>{{ book.book_title }}</h3>
+      <h4>{{ book.author.author_name }}</h4>
+      <img src="https://covers.openlibrary.org/b/isbn/{{ book.book_isbn }}-M.jpg" />
+      <br>
+      <a href="https://openlibrary.org/isbn/{{ book.book_isbn }}">picture founded here</a>
+      <form action="{{url_for( 'delete', book_id=book.book_id, book_title=book.book_title )}}" method="POST">
+        <button class="delete">delete</button>
+      </form>
+      <br><br>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+  </body>
+</html>
