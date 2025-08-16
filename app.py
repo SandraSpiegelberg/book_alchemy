@@ -104,8 +104,8 @@ def search():
     return render_template("home.html", books=books, authors=author)
 
 
-@app.route("/<book_title>/<int:book_id>/delete", methods=['POST'])
-def delete(book_id, book_title):
+@app.route("/book/<int:book_id>/delete", methods=['POST'])
+def delete(book_id):
     """Deletes a book from the library and 
     if a author doesn't have any book in the library it also deletes the author.
     :param book_id: integer id number of the book to be deleted.
@@ -124,10 +124,11 @@ def delete(book_id, book_title):
     if not author.books:
         db.session.delete(author)
         db.session.commit()
-        flash(f'Book "{book_title}" and Author "{author.author_name}"\
+        flash(f'Book "{book.book_title}" and Author "{author.author_name}"\
               have been successfully deleted from the library.', 'success')
     else:
-        flash(f'Book "{book_title}" has been successfully deleted from the library.', 'success')
+        flash(f'Book "{book.book_title}" has been successfully deleted from the library.',
+            'success')
 
     return redirect(url_for("home"))
 

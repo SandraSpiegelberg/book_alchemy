@@ -87,7 +87,7 @@
       <img src="https://covers.openlibrary.org/b/isbn/{{ book.book_isbn }}-M.jpg" />
       <br>
       <a href="https://openlibrary.org/isbn/{{ book.book_isbn }}">picture founded here</a>
-      <form action="{{url_for( 'delete', book_id=book.book_id, book_title=book.book_title )}}" method="POST">
+      <form action="{{ url_for( 'delete', book_id=book.book_id )}}" method="POST">
         <button class="delete">delete</button>
       </form>
       <br><br>
